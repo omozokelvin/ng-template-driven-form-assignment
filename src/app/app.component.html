@@ -1,0 +1,101 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <!-- Add a Form with the following Inputs (and Validators)
+           1) Mail address (should not be empty and should be an email address)
+           2) A Dropdown which allows the user to select from three different Subscriptions ("Basic", "Advanced", "Pro")
+              Set "Advanced" as Default
+           3) A Password field (should not be empty)
+           4) A Submit Button
+
+           Display a warning message if the Form is invalid AND was touched. Display a warning message below each input if it's invalid.
+
+           Upon submitting the form, you should simply print the Value of the Form to the Console.
+           Optionally, display it in your template.
+      -->
+
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        {{f.value | json}}
+        <div
+          *ngIf="showError && f.touched"
+          class="alert alert-danger alert-dismissible" role="alert">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+            (click)="closeAlert()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          This form is invalid
+        </div>
+
+
+        <div class="form-group">
+          <label for="email">Email address:</label>
+          <input
+            type="text"
+            class="form-control" placeholder="johndoe@gmail.com"
+            name="email"
+            ngModel
+            aria-describedby="email"
+            required
+            email
+            #email="ngModel">
+          <small
+            class="text-danger"
+            *ngIf="!email.valid && email.touched">Please provide a valid email address</small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Subscriptions:</label>
+          <select
+            class="form-control"
+            placeholder="--Select--"
+            name="subscription"
+            [ngModel]="defaultSubscription"
+            aria-describedby="subscription">
+            <option
+              *ngFor="let subscription of subscriptions"
+              [value]="subscription">
+              {{subscription}}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            ngModel
+            aria-describedby="password"
+            required
+            minlength="6"
+            #password="ngModel">
+          <small
+            class="text-danger"
+            *ngIf="!password.valid && password.touched">Password is required and must be above 5 characters</small>
+        </div>
+
+        <div class="form-group">
+          <br>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="!f.valid">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+    <div
+      *ngIf="submitted"
+      class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+        <p>Your email address is: {{user.email}}</p>
+        <p>Your subscription is: {{user.subscription}}</p>
+      </div>
+    </div>
+  </div>
